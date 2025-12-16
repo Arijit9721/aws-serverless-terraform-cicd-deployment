@@ -1,7 +1,6 @@
 name: "Deploy Infrastructure"
 on: 
-  workflow_dispatch:  # only for testing, to be removed later
-    
+  workflow_dispatch: # only for the initial run,remove later
   pull_request:
     types:
       - closed
@@ -10,7 +9,6 @@ on:
     paths:
       - "Terraform/**"
       - "Backend/**"
-  
 jobs:
   deploy:
     if: ${{ github.event.pull_request.merged == true }} # ensure deployments dont run on closed but unmerged PRs
