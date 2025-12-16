@@ -2,18 +2,18 @@
 
 ```mermaid
 graph LR
-    User((User))
+    User(("User"))
 
     subgraph "AWS Cloud"
-        CF[CloudFront Distribution]
+        CF["CloudFront Distribution"]
 
         subgraph "Frontend Hosting"
-            S3[S3 Bucket<br>(Static Website)]
+            S3["S3 Bucket<br>(Static Website)"]
         end
 
         subgraph "Backend Logic"
-            Lambda[Lambda Function<br>(Python API)]
-            DDB[(DynamoDB Table)]
+            Lambda["Lambda Function<br>(Python API)"]
+            DDB[("DynamoDB Table")]
         end
     end
 
