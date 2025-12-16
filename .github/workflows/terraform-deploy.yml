@@ -1,0 +1,21 @@
+name: deploy to s3
+on: 
+  workflow_dispatch:  # only for testing, to be removed later
+    
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+    paths:
+      - "Terraform/**"  # run when the Terraform folder is being pushed to
+      - "Backend/**" # run when the Backend folder is being pushed to
+  
+jobs:
+  deploy:
+    if: ${{ github.event.pull_request.merged == true }}  # runs only when the code is merged
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4 
