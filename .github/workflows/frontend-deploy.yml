@@ -1,17 +1,20 @@
 name: deploy to s3
 on: 
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
     paths:
-      - "Frontend/**"  # run only when the Frontend folder is being pushed to 
+      - "Frontend/**"
 
 jobs:
   deploy:
+    if: ${{ github.event.pull_request.merged == true }} # ensure deployments dont run on closed but unmerged PRs
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2

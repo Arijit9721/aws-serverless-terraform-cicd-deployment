@@ -1,4 +1,4 @@
-name: deploy to s3
+name: "Deploy Infrastructure"
 on: 
   workflow_dispatch:  # only for testing, to be removed later
     
@@ -8,14 +8,41 @@ on:
     branches:
       - main
     paths:
-      - "Terraform/**"  # run when the Terraform folder is being pushed to
-      - "Backend/**" # run when the Backend folder is being pushed to
+      - "Terraform/**"
+      - "Backend/**"
   
 jobs:
   deploy:
-    if: ${{ github.event.pull_request.merged == true }}  # runs only when the code is merged
+    if: ${{ github.event.pull_request.merged == true }} # ensure deployments dont run on closed but unmerged PRs
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Terraform
 
     steps:
       - name: Checkout the code
         uses: actions/checkout@v4 
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Terraform Formating
+        run: terraform fmt -check
+
+      - name: Validate Terraform
+        run: terraform validate
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Apply Terraform
+        run: terraform apply --auto-approve
+
+      
