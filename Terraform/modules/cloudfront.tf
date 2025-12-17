@@ -18,7 +18,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   # origin of the lambda function for api calls
   origin {
-    domain_name = replace(aws_lambda_function_url.lambda_url.function_url, "https://", "")
+    domain_name = split("/", aws_lambda_function_url.lambda_url.function_url)[2]
     origin_id   = "Lambda-API"
 
     custom_origin_config {
