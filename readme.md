@@ -104,23 +104,11 @@ Since there is no infrastructure yet, the first run needs to be triggered manual
 
 To destroy the infrastructure and stop incurring costs, follow these steps.
 
-**Note**: Since the CI/CD pipeline is designed for creation/updating, destruction is best done locally.
+To destroy the infrastructure and stop incurring costs, you can use the manual **Destroy Workflow** in GitHub Actions.
 
-1. **Configure Local AWS**:
-   ```bash
-   aws configure
-   # Enter your Access Key and Secret Key
-   ```
-2. **Initialize Terraform**:
-   ```bash
-   cd Terraform
-   terraform init
-   # This connects to the S3 backend where the state is stored
-   ```
-3. **Destroy**:
-   ```bash
-   terraform destroy --auto-approve
-   ```
-   - **Note**: If your S3 bucket is not empty, Terraform might fail to delete it. You may need to empty the bucket manually in the AWS Console first:
-     - Go to S3 > Select Bucket > Empty.
-     - Then run `terraform destroy` again.
+1. Go to the **Actions** tab in your GitHub repository.
+2. Select **"Destroy Infrastructure"** from the left sidebar.
+3. Click the **Run workflow** button.
+4. This will trigger a `terraform destroy` command in the CI environment, safely removing all resources.
+
+**Note:** Just like with local destruction, if the S3 bucket is not empty, the destroy might fail. The workflow is configured to handle standard cleanup, but if you have manually uploaded extra files, you might need to empty the bucket via AWS Console first.

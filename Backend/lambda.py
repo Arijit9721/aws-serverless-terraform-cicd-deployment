@@ -24,7 +24,7 @@ def lambda_handler(event, context):
     try:
         response = dynamo_table_name.update_item(
         Key = { 
-            'websites': 'Portfollio_Webiste' # get the partition key/value to find the other attributes under it
+            'websites': 'Portfolio_Website' # get the partition key/value to find the other attributes under it
         },
         UpdateExpression = "SET views = views + :increment", # increment the views arttribute
         ExpressionAttributeValues={
