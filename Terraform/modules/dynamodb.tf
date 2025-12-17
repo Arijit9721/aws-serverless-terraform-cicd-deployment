@@ -10,11 +10,6 @@ resource "aws_dynamodb_table" "views_table" {
     type = "S"
   }
 
-  attribute {
-    name = var.second_key
-    type = "N"
-  }
-
   # this script runs after table creation to add values to the table
   provisioner "local-exec" {
     command = "python3 ${path.cwd}/insert_data.py"
