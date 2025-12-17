@@ -1,5 +1,6 @@
 // After (through CloudFront):
 const API_URL = '/api/views';  // Relative path, uses same domain
+const roleElement = document.getElementById('role-text');
 
 async function updateViewCount() {
   try {
