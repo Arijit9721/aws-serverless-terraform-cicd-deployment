@@ -6,6 +6,21 @@ resource "aws_cloudfront_origin_access_control" "s3-oac" {
   signing_protocol                  = "sigv4"
 }
 
+# Managed CloudFront Policy for optimized caching 
+data "aws_cloudfront_cache_policy" "optimized" {
+  name = "Managed-CachingOptimized"
+}
+
+# Managed CloudFront Policy for disabled caching  
+data "aws_cloudfront_cache_policy" "disabled" {
+  name = "Managed-CachingDisabled"
+}
+
+# Managed CloudFront Policy for all viewer except host header
+data "aws_cloudfront_origin_request_policy" "all_viewer" {
+  name = "Managed-AllViewerExceptHostHeader"
+}
+
 # The cloudfront resource 
 resource "aws_cloudfront_distribution" "s3_distribution" {
 
@@ -39,15 +54,15 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     cached_methods         = ["GET", "HEAD"]
     target_origin_id       = "S3-${var.bucket-name}"
     viewer_protocol_policy = "redirect-to-https"
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" # Premade policy for optimized caching 
+    cache_policy_id        = data.aws_cloudfront_cache_policy.optimized.id
   }
 
   # when the website is served from cloudfront cache, call the lambda but don't cache the website
   ordered_cache_behavior {
     path_pattern             = "/api/*"
     target_origin_id         = "Lambda-API"
-    cache_policy_id          = "4135d2f9-1017-47ca-8189-4839840eb3ad" # Premade policy to stop caching
-    origin_request_policy_id = "b689b0a8-53d0-40a8-baf7-d57312e4e027" # Premade policy for header/cookies handling
+    cache_policy_id          = data.aws_cloudfront_cache_policy.disabled.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
     allowed_methods          = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
     cached_methods           = ["GET", "HEAD"]
     viewer_protocol_policy   = "redirect-to-https"
