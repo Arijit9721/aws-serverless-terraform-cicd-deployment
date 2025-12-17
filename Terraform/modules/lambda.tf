@@ -34,7 +34,7 @@ resource "aws_lambda_function_url" "lambda_url" {
   # allow this url to only be accessed from cloudfront 
   cors {
     allow_credentials = true
-    allow_origins     = ["https://${aws_cloudfront_distribution.s3_distribution.domain_name}"]
+    allow_origins     = ["*"]
     allow_methods     = ["GET", "POST"]
     allow_headers     = ["date", "keep-alive"]
     expose_headers    = ["keep-alive", "date"]

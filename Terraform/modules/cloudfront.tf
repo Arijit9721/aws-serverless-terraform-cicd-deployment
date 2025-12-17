@@ -16,6 +16,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id                = "S3-${var.bucket-name}"
   }
 
+  # origin of the lambda function for api calls
   origin {
     domain_name = replace(aws_lambda_function_url.lambda_url.function_url, "https://", "")
     origin_id   = "Lambda-API"
