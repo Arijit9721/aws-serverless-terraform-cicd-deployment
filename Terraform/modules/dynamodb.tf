@@ -17,7 +17,6 @@ resource "aws_dynamodb_table" "views_table" {
     environment = {
       table_name = var.table_name
       hash_key   = var.hash_key
-      second_key = var.second_key
     }
 
   }

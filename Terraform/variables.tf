@@ -18,10 +18,6 @@ variable "hash_key" {
   type    = string
   default = "websites"
 }
-variable "second_key" {
-  type    = string
-  default = "views"
-}
 variable "lambda_name" {
   type    = string
   default = "portfolio-website-lambda"

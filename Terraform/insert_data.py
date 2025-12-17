@@ -7,7 +7,6 @@ import os
 try:
     table_name = os.environ["table_name"]
     hash_key  = os.environ["hash_key"]
-    second_key  = os.environ["second_key"]
 except KeyError as e:
     print(json.dumps({"error": f"Missing required environment variable: {str(e)}"}))
     sys.exit(1)
@@ -20,8 +19,8 @@ try:
     # putting the items to the table
     dynamo_table.put_item(
         Item = {
-            hash_key: "Portfollio_Webiste",
-            second_key: 1,
+            hash_key: "Portfolio_Website",
+            "views": 1,
         }
     )
     print("Succcessfully inserted the values to Dynamodb")
