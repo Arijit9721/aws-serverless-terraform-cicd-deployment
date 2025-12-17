@@ -12,17 +12,17 @@ resource "aws_lambda_function" "main_lambda_function" {
   role             = aws_iam_role.lambda_role.arn
   handler          = "index.lambda_handler"
   source_code_hash = data.archive_file.code_file.output_base64sha256
-  runtime = "python3.12"
-  
+  runtime          = "python3.12"
+
 
   environment {
     variables = {
-      lambda_name = var.lambda_name
+      lambda_name  = var.lambda_name
       dynamo_table = var.table_name
-    }   
+    }
   }
 
-  depends_on = [ aws_s3_bucket.static_code_bucket, aws_dynamodb_table.views_table ]
+  depends_on = [aws_s3_bucket.static_code_bucket, aws_dynamodb_table.views_table]
 }
 
 # Exposing the lambda function using a url
@@ -40,14 +40,14 @@ resource "aws_lambda_function_url" "lambda_url" {
     expose_headers    = ["keep-alive", "date"]
     max_age           = 86400
   }
-  depends_on = [ aws_lambda_function.main_lambda_function ]
+  depends_on = [aws_lambda_function.main_lambda_function]
 }
 
 # Allows cloudfront or other aws resources to access the lambda url 
 resource "aws_lambda_permission" "allow_public_url_access" {
   statement_id           = "AllowPublicURLInvoke"
-  action                 = "lambda:InvokeFunctionUrl" 
+  action                 = "lambda:InvokeFunctionUrl"
   function_name          = aws_lambda_function.main_lambda_function.function_name
-  principal              = "*"                         
-  function_url_auth_type = "NONE"                      
+  principal              = "*"
+  function_url_auth_type = "NONE"
 }

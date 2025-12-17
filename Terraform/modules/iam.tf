@@ -17,12 +17,12 @@ resource "aws_iam_role" "lambda_role" {
 
 # Policy to provide the needed permissions
 resource "aws_iam_policy" "lambda_policy" {
-  name        = "${var.lambda_name}-policy"
+  name = "${var.lambda_name}-policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-    # The essential cloudwatch permissions
+      # The essential cloudwatch permissions
       {
         Action = [
           "logs:CreateLogGroup",
@@ -38,10 +38,10 @@ resource "aws_iam_policy" "lambda_policy" {
           "s3:GetObjects",
           "s3:ListBucket",
         ]
-        Effect   = "Allow"
-        Resource = [ aws_s3_bucket.static_code_bucket.arn,  # The bucket that lambda can access
-                     "${aws_s3_bucket.static_code_bucket.arn}/*" # allows the objects of the bucket to be accessed
-                   ]
+        Effect = "Allow"
+        Resource = [aws_s3_bucket.static_code_bucket.arn, # The bucket that lambda can access
+          "${aws_s3_bucket.static_code_bucket.arn}/*"     # allows the objects of the bucket to be accessed
+        ]
       },
       # The dynamodb table permissions
       {
