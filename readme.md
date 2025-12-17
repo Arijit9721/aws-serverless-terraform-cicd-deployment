@@ -51,52 +51,54 @@ The architecture ensures high availability and security by serving content via C
 
 ### Prerequisites
 
-1.  **AWS Account**: An active AWS account.
-2.  **S3 Backend Bucket**: You must manually create an S3 bucket named `arijit21-s3-backend-terraform` (or update `Terraform/backend.tf` with your own bucket name) to store the Terraform state file.
-3.  **Terraform**: (Optional) Install Terraform locally if you wish to run plans/destroys on your machine.
-4.  **AWS CLI**: (Optional) Configured with your credentials for local testing.
+1. **AWS Account**: An active AWS account.
+2. **S3 Backend Bucket**: You must manually create an S3 bucket named `arijit21-s3-backend-terraform` (or update `Terraform/backend.tf` with your own bucket name) to store the Terraform state file.
+3. **Terraform**: (Optional) Install Terraform locally if you wish to run plans/destroys on your machine.
+4. **AWS CLI**: (Optional) Configured with your credentials for local testing.
 
 ### GitHub Repository Setup
 
-1.  **Secrets**: Go to **Settings** -> **Secrets and variables** -> **Actions** and add:
+1. **Secrets**: Go to **Settings** -> **Secrets and variables** -> **Actions** and add:
 
-    - `AWS_ACCESS_KEY_ID`: Your AWS Access Key.
-    - `AWS_SECRET_ACCESS_KEY`: Your AWS Secret Key.
-    - `AWS_S3_BUCKET`: The name of your S3 bucket (Must match the `bucket-name` in your Terraform variables).
+   - `AWS_ACCESS_KEY`: Your AWS Access Key.
+   - `AWS_SECRET_ACCESS_KEY`: Your AWS Secret Key.
+   - `AWS_S3_BUCKET`: The name of your S3 bucket (Must match the `bucket-name` in your Terraform variables).
 
-2.  **Branch Protection**:
-    - Go to **Settings** -> **Branches**.
-    - Add a rule for **`main`**.
-    - Check **"Require a pull request before merging"**.
+2. **Branch Protection**:
+
+   - Go to **Settings** -> **Branches**.
+   - Add a rule for **`main`**.
+   - Check **"Require a pull request before merging"**.
 
 ### ⚙️ Initial Run (First Deployment)
 
 Since there is no infrastructure yet, the first run needs to be triggered manually. We use the `workflow_dispatch` event for this.
 
-1.  **Trigger Infrastructure Deploy**:
+1. **Trigger Infrastructure Deploy**:
 
-    - Go to the **Actions** tab in GitHub.
-    - Select **"Deploy Infrastructure"** from the left sidebar.
-    - Click **Run workflow** -> Select `main` branch -> **Run workflow**.
-    - Wait for this to complete (creates S3, Lambda, DynamoDB, etc.).
+   - Go to the **Actions** tab in GitHub.
+   - Select **"Deploy Infrastructure"** from the left sidebar.
+   - Click **Run workflow** -> Select `main` branch -> **Run workflow**.
+   - Wait for this to complete (creates S3, Lambda, DynamoDB, etc.).
 
-2.  **Trigger Frontend Deploy**:
+2. **Trigger Frontend Deploy**:
 
-    - Select **"deploy to s3"** from the sidebar.
-    - Click **Run workflow**.
-    - This uploads your HTML/CSS/JS to the newly created bucket.
+   - Select **"deploy to s3"** from the sidebar.
+   - Click **Run workflow**.
+   - This uploads your HTML/CSS/JS to the newly created bucket.
 
-3.  **Clean Up Workflow**:
-    - Once fully deployed, verify your website works.
-    - **Important**: Edit the workflow files and remove the `workflow_dispatch:` lines.
-    - Commit these changes. Now, your pipeline is strictly "Pull Request" driven!
+3. **Clean Up Workflow**:
+
+   - Once fully deployed, verify your website works.
+   - **Important**: Edit the workflow files and remove the `workflow_dispatch:` lines.
+   - Commit these changes. Now, your pipeline is strictly "Pull Request" driven!
 
 ### 🔄 Standard Workflow (Deploying Changes)
 
-1.  Create a branch: `git checkout -b feature/new-style`
-2.  Make code changes.
-3.  Push and open a Pull Request to `main`.
-4.  Review and Merge. GitHub Actions will automatically deploy.
+1. Create a branch: `git checkout -b feature/new-style`
+2. Make code changes.
+3. Push and open a Pull Request to `main`.
+4. Review and Merge. GitHub Actions will automatically deploy.
 
 ## 🧹 Cleanup
 
@@ -104,21 +106,21 @@ To destroy the infrastructure and stop incurring costs, follow these steps.
 
 **Note**: Since the CI/CD pipeline is designed for creation/updating, destruction is best done locally.
 
-1.  **Configure Local AWS**:
-    ```bash
-    aws configure
-    # Enter your Access Key and Secret Key
-    ```
-2.  **Initialize Terraform**:
-    ```bash
-    cd Terraform
-    terraform init
-    # This connects to the S3 backend where the state is stored
-    ```
-3.  **Destroy**:
-    ```bash
-    terraform destroy --auto-approve
-    ```
-    - **Note**: If your S3 bucket is not empty, Terraform might fail to delete it. You may need to empty the bucket manually in the AWS Console first:
-      - Go to S3 > Select Bucket > Empty.
-      - Then run `terraform destroy` again.
+1. **Configure Local AWS**:
+   ```bash
+   aws configure
+   # Enter your Access Key and Secret Key
+   ```
+2. **Initialize Terraform**:
+   ```bash
+   cd Terraform
+   terraform init
+   # This connects to the S3 backend where the state is stored
+   ```
+3. **Destroy**:
+   ```bash
+   terraform destroy --auto-approve
+   ```
+   - **Note**: If your S3 bucket is not empty, Terraform might fail to delete it. You may need to empty the bucket manually in the AWS Console first:
+     - Go to S3 > Select Bucket > Empty.
+     - Then run `terraform destroy` again.
