@@ -57,8 +57,8 @@ resource "aws_s3_bucket_policy" "public_policy" {
           Service = "cloudfront.amazonaws.com"
         }
         Resource = "${aws_s3_bucket.static_code_bucket.arn}/*" # Grants access to all objects in the bucket
-        condition = {
-          stringEquals = {
+        Condition = {
+          StringEquals = {
             "AWS:SourceArn" = aws_cloudfront_distribution.s3_distribution.arn # Grants access to only this cloudfront
           }
         }
