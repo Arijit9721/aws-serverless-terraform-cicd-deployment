@@ -28,7 +28,6 @@ resource "aws_lambda_function" "main_lambda_function" {
 # Exposing the lambda function using a url
 resource "aws_lambda_function_url" "lambda_url" {
   function_name      = aws_lambda_function.main_lambda_function.function_name
-  qualifier          = "$LATEST"
   authorization_type = "NONE"
 
   # allow this url to only be accessed from cloudfront 
