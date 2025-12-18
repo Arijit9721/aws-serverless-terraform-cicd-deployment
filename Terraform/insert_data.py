@@ -20,7 +20,7 @@ try:
     dynamo_table.put_item(
         Item = {
             hash_key: "Portfolio_Website",
-            "views": 1,
+            "total_views": 1,
         }
     )
     print("Succcessfully inserted the values to Dynamodb")

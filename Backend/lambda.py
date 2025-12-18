@@ -26,7 +26,7 @@ def lambda_handler(event, context):
         Key = { 
             'websites': 'Portfolio_Website' # get the partition key/value to find the other attributes under it
         },
-        UpdateExpression = "SET views = if_not_exists(views, :start) + :increment", # increment the views arttribute
+        UpdateExpression = "SET total_views = if_not_exists(total_views, :start) + :increment", # increment the total_views arttribute
         ExpressionAttributeValues={
             ':increment': 1,   # increment by 1
             ':start': 0
@@ -35,7 +35,7 @@ def lambda_handler(event, context):
         )
         
     # printing the new value of views
-        new_views = response['Attributes']['views']
+        new_views = response['Attributes']['total_views']
         print(f"new view count: {int(new_views)}")    
 
     # returning the values to lambda url
