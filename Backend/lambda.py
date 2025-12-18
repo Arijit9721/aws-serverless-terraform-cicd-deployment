@@ -26,9 +26,10 @@ def lambda_handler(event, context):
         Key = { 
             'websites': 'Portfolio_Website' # get the partition key/value to find the other attributes under it
         },
-        UpdateExpression = "SET views = views + :increment", # increment the views arttribute
+        UpdateExpression = "SET views = if_not_exists(views, :start) + :increment", # increment the views arttribute
         ExpressionAttributeValues={
-            ':increment': 1   # increment by 1
+            ':increment': 1,   # increment by 1
+            ':start': 0
         },
         ReturnValues="UPDATED_NEW" # Return the new value after update
         )
